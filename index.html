@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F3EEE3">
+<title>CREW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3EEE3; --card:#FFFFFF; --ink:#13111F; --muted:#6B6878; --line:#E6E0D3;
+  --lime:#D7FF3A; --red:#E5484D; --green:#22A55B; --amber:#F2A20C;
+  --grad:linear-gradient(160deg,#FF6A3D 0%,#C1478F 55%,#7B4DFF 100%);
+  --r:22px; --disp:'Unbounded','DM Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);font:16px/1.4 'DM Sans',system-ui,sans-serif}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea{font:inherit;color:inherit}
+.app{max-width:440px;margin:0 auto;min-height:100vh;min-height:100dvh;position:relative;padding:env(safe-area-inset-top) 0 104px}
+.h1{font:800 28px/1.05 var(--disp);letter-spacing:-.5px}
+.h2{font:600 19px/1.15 var(--disp)}
+.h3{font:600 15px/1.2 var(--disp)}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.xs{font-size:12px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 4px;gap:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--lime);font-weight:700;font-size:14px;padding:9px 14px;border-radius:99px;white-space:nowrap}
+.iconbtn{width:42px;height:42px;border-radius:50%;background:var(--card);display:grid;place-items:center;flex:none;position:relative}
+.iconbtn .n{position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;border-radius:9px;background:var(--lime);border:2px solid var(--ink);font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 3px}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--ink);color:var(--lime);display:grid;place-items:center;font-weight:700;font-size:15px;flex:none}
+.pad{padding:0 20px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:54px;border-radius:99px;font-weight:700;font-size:16px;border:2px solid var(--ink);width:100%}
+.btn.lime{background:var(--lime)}
+.btn.dark{background:var(--ink);color:#fff}
+.btn.ghost{background:transparent}
+.btn.soft{background:var(--card);border-color:var(--card)}
+.btn.sm{height:42px;font-size:14px}
+.btn:disabled{opacity:.35}
+.card{background:var(--card);border-radius:var(--r);padding:16px}
+.card + .card{margin-top:12px}
+.sect{font:600 13px var(--disp);text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:24px 4px 10px}
+.tag{display:inline-flex;align-items:center;gap:4px;background:var(--bg);border-radius:99px;padding:4px 10px;font-size:13px;font-weight:500}
+.tag.lime{background:var(--lime)}
+.tag.dark{background:var(--ink);color:#fff}
+.seg{display:flex;background:#E8E2D5;border-radius:99px;padding:4px}
+.seg button{flex:1;height:38px;border-radius:99px;font-weight:700;font-size:14px;color:var(--muted)}
+.seg button.on{background:var(--card);color:var(--ink)}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.bar-track{height:8px;border-radius:9px;background:#ECE6D9;overflow:hidden}
+.bar-fill{height:100%;background:var(--ink);border-radius:9px}
+
+/* nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20}
+.nav .in{max-width:440px;margin:0 auto;background:var(--ink);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 6px calc(8px + env(safe-area-inset-bottom));border-radius:26px 26px 0 0}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:5px;color:#8C88A0;font-size:11px;font-weight:700;padding:6px 0;position:relative}
+.nav button .ic{width:52px;height:30px;border-radius:99px;display:grid;place-items:center;transition:.2s}
+.nav button.on{color:#fff}
+.nav button.on .ic{background:var(--lime);color:var(--ink)}
+.nav .dot{position:absolute;top:4px;right:calc(50% - 22px);width:9px;height:9px;border-radius:50%;background:var(--lime);border:2px solid var(--ink)}
+
+/* discover */
+.stack{position:relative;margin:0 20px;height:min(56vh,470px)}
+.dcard{position:absolute;inset:0;border-radius:28px;background:var(--grad);color:#fff;padding:18px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 18px 40px -18px rgba(60,20,90,.55);transition:transform .28s ease,opacity .28s ease;touch-action:pan-y;user-select:none;overflow:hidden}
+.dcard.behind{transform:translateY(12px) scale(.95);opacity:.5}
+.dcard .tp{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.dcard .badge{background:var(--bg);color:var(--ink);font-weight:700;font-size:13px;padding:7px 12px;border-radius:99px}
+.dcard .match{background:var(--lime);color:var(--ink);font-weight:700;font-size:13px;padding:7px 12px;border-radius:99px}
+.dcard .name{font:800 28px/1.05 var(--disp);margin-bottom:6px}
+.dcard .sub{font-size:15px;opacity:.95}
+.dcard .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.dcard .chips span{background:rgba(255,255,255,.2);border-radius:99px;padding:4px 10px;font-size:13px;font-weight:500}
+.dcard .likes{margin-top:12px;font-size:14px;background:rgba(19,17,31,.25);border-radius:14px;padding:8px 12px}
+.faces{display:flex;margin-top:12px}
+.faces span{width:32px;height:32px;border-radius:50%;background:var(--bg);color:var(--ink);display:grid;place-items:center;font-size:11px;font-weight:700;border:2px solid #fff;margin-left:-8px}
+.faces span:first-child{margin-left:0}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 20px 0}
+.empty{text-align:center;padding:36px 24px}
+.empty .h2{margin-bottom:8px}
+
+/* crews list */
+.crew{display:flex;gap:14px;align-items:center;width:100%;text-align:left;padding:13px 0;border-bottom:1px solid var(--line)}
+.crew:last-child{border-bottom:0}
+.cav{width:50px;height:50px;border-radius:16px;background:var(--grad);color:#fff;display:grid;place-items:center;font:800 14px var(--disp);flex:none}
+.crew .grow{flex:1;min-width:0}
+.crew .last{color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.udot{width:10px;height:10px;border-radius:50%;background:var(--ink);flex:none}
+.req{display:flex;align-items:center;gap:12px}
+.req .grow{flex:1}
+
+/* pushed screen */
+.screen{position:fixed;inset:0;background:var(--bg);z-index:30;display:flex;flex-direction:column}
+.screen.anim{animation:slide .22s ease}
+.screen .wrap{max-width:440px;width:100%;margin:0 auto;display:flex;flex-direction:column;height:100%;padding-top:env(safe-area-inset-top)}
+.bar{display:flex;align-items:center;gap:12px;padding:14px 16px 10px}
+.back{width:40px;height:40px;border-radius:50%;background:var(--card);display:grid;place-items:center;flex:none}
+.scroll{flex:1;overflow-y:auto;padding:0 20px 24px}
+@keyframes slide{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
+
+/* chat */
+.meet{background:var(--ink);color:#fff;border-radius:var(--r);padding:16px;margin-bottom:14px}
+.meet .k{color:var(--lime);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.opt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#26233A;border-radius:14px;padding:10px 12px;margin-top:8px;position:relative;overflow:hidden;color:#fff}
+.opt .fill{position:absolute;inset:0 auto 0 0;background:rgba(215,255,58,.18)}
+.opt.on{outline:2px solid var(--lime)}
+.opt span{position:relative}
+.opt .grow{flex:1}
+.ice{display:flex;gap:10px;align-items:center;background:var(--card);border:1.5px dashed #CFC7B6;border-radius:18px;padding:12px 14px;margin-bottom:14px;width:100%;text-align:left;font-size:14px}
+.msg{max-width:80%;margin:6px 0;display:flex;flex-direction:column}
+.msg .who{font-size:12px;color:var(--muted);margin:0 0 3px 12px}
+.msg .b{background:var(--card);padding:10px 14px;border-radius:18px 18px 18px 6px}
+.msg.me{margin-left:auto;align-items:flex-end}
+.msg.me .b{background:var(--ink);color:#fff;border-radius:18px 18px 6px 18px}
+.msg.sys{max-width:100%;align-items:center}
+.msg.sys .b{background:transparent;color:var(--muted);font-size:13px;padding:4px;text-align:center}
+.msg.alert .b{background:#FDE7E7;color:#9B1C1F;border-radius:14px;font-weight:500}
+.pollmsg{background:var(--card);border-radius:18px;padding:14px;margin:8px 0}
+.pollmsg .opt{background:var(--bg);color:var(--ink)}
+.pollmsg .opt .fill{background:rgba(215,255,58,.6)}
+.pollmsg .opt.on{outline:2px solid var(--ink)}
+.compose{display:flex;gap:8px;padding:10px 16px calc(12px + env(safe-area-inset-bottom));background:var(--bg);align-items:center}
+.compose input{flex:1;height:48px;border-radius:99px;border:2px solid var(--line);background:var(--card);padding:0 18px;outline:none;min-width:0}
+.compose input:focus{border-color:var(--ink)}
+.compose .send{width:48px;height:48px;border-radius:50%;background:var(--lime);border:2px solid var(--ink);display:grid;place-items:center;flex:none}
+.compose .plus{width:48px;height:48px;border-radius:50%;background:var(--card);display:grid;place-items:center;flex:none;font-size:24px;font-weight:500}
+
+/* hub */
+.hero{border-radius:28px;color:#fff;padding:18px;margin:8px 20px 14px;position:relative}
+.hero .h1{margin:4px 0 2px}
+.live{display:flex;gap:10px;align-items:center;background:rgba(19,17,31,.28);border-radius:16px;padding:10px 12px;margin-top:12px;font-size:14px}
+.pulse{width:10px;height:10px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(215,255,58,.7);animation:pulse 1.6s infinite;flex:none}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(215,255,58,0)}100%{box-shadow:0 0 0 0 rgba(215,255,58,0)}}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--card);border-radius:var(--r);padding:14px;text-align:left;display:flex;flex-direction:column;gap:10px;min-height:118px}
+.tile .ico{width:40px;height:40px;border-radius:13px;background:var(--bg);display:grid;place-items:center}
+.tile b{display:block}
+.tile .xs{color:var(--muted);font-size:13px;line-height:1.3}
+.tile.red .ico{background:#FDE7E7;color:var(--red)}
+.tile.warn .xs{color:#B26A00;font-weight:500}
+
+.set{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.set .time{font-weight:700;width:50px;font-size:14px}
+.set .grow{flex:1}
+.star{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line);flex:none}
+.star.on{background:var(--lime);border-color:var(--ink)}
+.day{font:600 14px var(--disp);margin:18px 0 2px}
+.clash{background:#FFF3D6;color:#7A4A00;border-radius:14px;padding:10px 12px;font-size:14px;margin-top:10px}
+.item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.item .grow{flex:1}
+.qty{display:flex;align-items:center;gap:10px}
+.qty button{width:34px;height:34px;border-radius:50%;background:var(--card);border:2px solid var(--line);font-weight:700}
+.footbar{padding:12px 16px calc(14px + env(safe-area-inset-bottom))}
+.map{background:#E4F0D0;border-radius:var(--r);overflow:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px;font-size:14px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.sos{width:100%;height:110px;border-radius:28px;background:var(--red);color:#fff;font:800 26px var(--disp);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.sos small{font:500 14px 'DM Sans',sans-serif;opacity:.9}
+.qchips{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 8px;scrollbar-width:none}
+.qchips::-webkit-scrollbar{display:none}
+.qchips button{flex:none;background:var(--card);border-radius:99px;padding:8px 14px;font-size:14px;font-weight:500}
+
+/* missions */
+.lvl{background:var(--ink);color:#fff;border-radius:28px;padding:18px;margin:8px 20px 14px}
+.lvl .pts{font:800 34px var(--disp);color:var(--lime)}
+.lvl .bar-track{background:#2A2738;margin-top:12px}
+.lvl .bar-fill{background:var(--lime)}
+.mission{display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.mission:last-child{border-bottom:0}
+.mission .chk{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex:none}
+.mission.done .chk{background:var(--lime);border-color:var(--ink)}
+.mission .grow{flex:1}
+.mission .bar-track{margin-top:6px;height:6px}
+.post{background:var(--card);border-radius:var(--r);overflow:hidden}
+.post + .post{margin-top:12px}
+.post .img{height:190px;display:flex;align-items:flex-end;padding:14px;color:#fff;font:600 18px var(--disp)}
+.post .meta{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.post .meta .grow{flex:1}
+.heart{display:flex;align-items:center;gap:6px;font-weight:700;font-size:14px}
+.heart.on{color:var(--red)}
+.heart.on svg{fill:var(--red)}
+
+/* profile */
+.prof{display:flex;flex-direction:column;align-items:center;text-align:center;padding:8px 20px 4px}
+.prof .avatar{width:84px;height:84px;font-size:28px}
+.vbadge{display:inline-flex;align-items:center;gap:6px;background:#E3F1FF;color:#1360B8;font-weight:700;font-size:13px;padding:5px 10px;border-radius:99px;margin-top:8px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:9px 14px;border-radius:99px;background:var(--bg);border:2px solid transparent;font-weight:500;font-size:14px}
+.chip.on{border-color:var(--ink);background:var(--lime)}
+.card .chip{background:var(--bg)}
+.card .chip.on{background:var(--lime)}
+.toggle{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.toggle:last-child{border-bottom:0}
+.toggle .grow{flex:1}
+.sw{width:50px;height:30px;border-radius:99px;background:#D6CFC0;position:relative;flex:none;transition:.2s}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:.2s}
+.sw.on{background:var(--ink)}
+.sw.on::after{left:23px;background:var(--lime)}
+.lrow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 0;border-bottom:1px solid var(--line)}
+.lrow:last-child{border-bottom:0}
+.lrow .grow{flex:1}
+
+/* sheet */
+.shade{position:fixed;inset:0;background:rgba(19,17,31,.45);z-index:40;display:flex;align-items:flex-end;animation:fade .2s}
+.sheet{background:var(--bg);width:100%;max-width:440px;margin:0 auto;border-radius:28px 28px 0 0;padding:10px 20px calc(24px + env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;animation:up .25s ease}
+.grab{width:44px;height:5px;border-radius:9px;background:#CFC7B6;margin:0 auto 16px}
+@keyframes up{from{transform:translateY(40px)}to{transform:none}}
+@keyframes fade{from{opacity:0}}
+.actrow{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border-radius:18px;padding:14px;margin-top:8px}
+.actrow .ico{width:40px;height:40px;border-radius:13px;background:var(--bg);display:grid;place-items:center;flex:none}
+
+/* onboarding */
+.ob{padding:26px 20px 30px;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+.logo{font:800 44px/1 var(--disp);letter-spacing:-1px}
+.steps{display:flex;gap:6px;margin:18px 0 6px}
+.steps i{flex:1;height:5px;border-radius:9px;background:#DDD6C7}
+.steps i.on{background:var(--ink)}
+.fest{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:13px;border-radius:var(--r);background:var(--card);border:2px solid transparent;margin-top:10px}
+.fest.on{border-color:var(--ink)}
+.fest .fl{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;color:#fff;font:800 14px var(--disp);flex:none}
+.field{width:100%;height:54px;border-radius:16px;border:2px solid var(--line);background:var(--card);padding:0 16px;font-size:16px;outline:none;margin-top:8px}
+.field:focus{border-color:var(--ink)}
+.label{font-weight:700;margin:22px 0 10px}
+.ob .chip{background:var(--card)}
+.ob .chip.on{background:var(--lime)}
+.toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top));transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:99px;font-weight:500;font-size:14px;z-index:60;animation:fade .2s;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+/* ================= data ================= */
+const GENRE_OF={'Massive Attack':'Electronic','Phoebe Bridgers':'Indie','Turnstile':'Rock','Bad Gyal':'Latin','Doechii':'Hip-hop','Robyn':'Pop','Fontaines D.C.':'Indie','FKA twigs':'R&B','The Chemical Brothers':'Electronic','Hayley Williams':'Rock','Pavement':'Indie','Skrillex b2b Ninajirachi':'Electronic','Bonobo':'Electronic','Romy':'Electronic','Yung Lean':'Hip-hop','Tokischa':'Latin','Jessie Ware':'Pop','Peggy Gou':'Techno','Carl Cox':'Techno',
+ 'Tame Impala':'Indie','Rosalía':'Latin','Fred again..':'Electronic','Arctic Monkeys':'Rock','Bad Bunny':'Latin','Charli xcx':'Pop','Kendrick Lamar':'Hip-hop','Billie Eilish':'Pop','SZA':'R&B','Charlotte de Witte':'Techno'};
+const GENRES=['Indie','Electronic','Techno','Hip-hop','Pop','Rock','Latin','R&B'];
+const FAVS=['Tame Impala','Rosalía','Fred again..','Arctic Monkeys','Bad Bunny','Charli xcx','Kendrick Lamar','Billie Eilish','SZA','Charlotte de Witte'];
+const FESTS=[
+  {id:'primavera',name:'Primavera Sound',short:'PS',city:'Barcelona',venue:'Parc del Fòrum',dates:'3–5 June 2027',start:'2027-06-03',colors:['#FF6A3D','#7B4DFF'],
+   lineup:[['Massive Attack','Thu'],['Phoebe Bridgers','Thu'],['Turnstile','Thu'],['Bad Gyal','Thu'],['Doechii','Fri'],['Robyn','Fri'],['Fontaines D.C.','Fri'],['FKA twigs','Fri'],['The Chemical Brothers','Sat'],['Hayley Williams','Sat'],['Pavement','Sat'],['Skrillex b2b Ninajirachi','Sat']]},
+  {id:'sonar',name:'Sónar',short:'SÓ',city:'Barcelona',venue:'By Day: seafront · By Night: Fira Gran Via',dates:'17–19 June 2027',start:'2027-06-17',colors:['#2A2560','#3B7BFF'],
+   lineup:[['Bonobo','Thu'],['Romy','Thu'],['Yung Lean','Fri'],['Tokischa','Fri'],['Jessie Ware','Fri'],['Peggy Gou','Sat'],['Carl Cox','Sat']]},
+  {id:'cruilla',name:'Cruïlla',short:'CR',city:'Barcelona',venue:'Parc del Fòrum',dates:'7–10 July 2027',start:'2027-07-07',colors:['#FFB800','#FF4D6D'],lineup:[]},
+  {id:'madcool',name:'Mad Cool',short:'MC',city:'Madrid',venue:'Iberdrola Music, Villaverde',dates:'July 2027 · dates TBC',start:null,colors:['#1FB57A','#145C4A'],lineup:[]},
+];
+const TIMES=['19:00','20:30','20:30','22:15'];
+const STAGES=['Main stage','Stage 2','Stage 3','Main stage'];
+const SPOTS={primavera:'Bar on Rambla del Poblenou',sonar:'Café by Plaça d\'Espanya',cruilla:'Bar on Rambla del Poblenou',madcool:'Bar near Plaza de Legazpi'};
+const artistsFor=f=>f.lineup.length?f.lineup.map(a=>a[0]):FAVS;
+
+function pool(f){
+  const A=artistsFor(f);
+  return [
+    {id:f.id+'-g1',type:'group',name:'The Night Owls',size:4,verified:true,faces:['MP','JV','LD','AO'],members:['Marta','Jordi','Léa','Amara'],
+     line:'4 going · meet at a CREW Spot',chips:['Arrive early','Front half'],artists:[A[0],A[4]||A[1],A[2]],approval:false,
+     bio:'Meeting for a drink before the gates, then straight to the front.'},
+    {id:f.id+'-p1',type:'person',name:'Lucía',age:21,verified:true,from:'Barcelona',solo:true,chips:['First festival','Going solo'],artists:[A[4]||A[1],A[5]||A[2]],
+     bio:'Erasmus at UB. Nobody in my class likes this music, so here I am.'},
+    {id:f.id+'-g2',type:'group',name:'Erasmus BCN',size:6,verified:true,faces:['TK','EJ','NB','SR'],members:['Tomás','Emma','Noah','Sofia'],
+     line:'6 going · English speaking',chips:['Chill','Budget','Metro together'],artists:[A[1],A[6]||A[3]],approval:true,
+     bio:'International students. We meet on the metro and go in together.'},
+    {id:f.id+'-p2',type:'person',name:'Noah',age:24,verified:true,from:'Berlin',solo:true,chips:['Flying in','Going solo'],artists:[A[0],A[2]],
+     bio:'Coming for the weekend, staying in Poblenou. Looking for people to go with.'},
+    {id:f.id+'-g3',type:'group',name:'Girls Go Too',size:5,verified:true,women:true,faces:['IC','AO','ES','MV'],members:['Inês','Amara','Elena','Marina'],
+     line:'5 going · women only',chips:['Women only','Stay together'],artists:[A[5]||A[1],A[7]||A[3],A[3]],approval:true,
+     bio:'Small group, everyone verified. We stick together after dark.'},
+    {id:f.id+'-p3',type:'person',name:'Jordi',age:19,verified:false,from:'Sabadell',solo:false,chips:['Low budget'],artists:[A[3]],
+     bio:'Two friends dropped out last minute. Have a spare day pass at face value.'},
+  ];
+}
+const REPLIES=['Same here','Who\'s bringing snacks?','Can\'t wait','Let\'s do it','Good shout','I\'ll be there a bit early','Anyone taking the metro?'];
+const ICE=['Which set are you not missing?','First festival you ever went to?','Glitter, bucket hat or full costume?','Best festival food you ever had?','Song that always gets you dancing?'];
+const SONGS={'Massive Attack':'Teardrop','Phoebe Bridgers':'Motion Sickness','Turnstile':'Mystery','Bad Gyal':'Fiebre','Doechii':'Denial Is a River','Robyn':'Dancing On My Own','Fontaines D.C.':'Starburster','FKA twigs':'Eusexua','The Chemical Brothers':'Galvanize','Hayley Williams':'Simmer','Pavement':'Cut Your Hair','Bonobo':'Kerala','Romy':'Loveher','Yung Lean':'Ginseng Strip 2002','Tokischa':'Linda','Jessie Ware':'Free Yourself','Peggy Gou':'(It Goes Like) Nanana','Carl Cox':'I Want You (Forever)','Tame Impala':'The Less I Know the Better','Rosalía':'Despechá','Fred again..':'Delilah','Arctic Monkeys':'505','Bad Bunny':'Tití Me Preguntó','Charli xcx':'360','Kendrick Lamar':'Alright','Billie Eilish':'Birds of a Feather','SZA':'Kill Bill','Charlotte de Witte':'Overdrive'};
+const FOOD=[
+  {s:'Burgers',items:[['Classic burger',9],['Veggie burger',9],['Fries',4]]},
+  {s:'Pizza',items:[['Margherita slice',5],['Pepperoni slice',6]]},
+  {s:'Drinks',items:[['Water 50cl',2],['Soft drink',3.5],['Beer',6]]},
+];
+const MISSIONS=[
+  {id:'join',label:'Join 2 crews',goal:2,pts:100},
+  {id:'msgs',label:'Send 10 messages in your crews',goal:10,pts:50},
+  {id:'polls',label:'Create a poll',goal:1,pts:50},
+  {id:'songs',label:'Add 3 songs to a crew playlist',goal:3,pts:75},
+  {id:'plan',label:'Save 5 sets to your plan',goal:5,pts:50},
+  {id:'safe',label:'Do a safe check-in',goal:1,pts:100},
+];
+const SEEDFEED=[
+  {id:'f1',crew:'The Night Owls',who:'Marta',cap:'Last year, front row. This year we need more people.',g:'linear-gradient(150deg,#FF6A3D,#7B4DFF)',likes:24},
+  {id:'f2',crew:'Erasmus BCN',who:'Tomás',cap:'Crew dinner before the lineup drop 🍕',g:'linear-gradient(150deg,#FFB800,#FF4D6D)',likes:11},
+  {id:'f3',crew:'Girls Go Too',who:'Inês',cap:'Matching bucket hats arrived.',g:'linear-gradient(150deg,#1FB57A,#3B7BFF)',likes:37},
+];
+
+/* ================= state ================= */
+const KEY='crew-v3';
+const fresh=()=>({onboarded:false,name:'',age:'18-21',city:'Barcelona',fest:'primavera',genres:[],artists:[],vibe:[],solo:true,
+  verified:false,msgPolicy:'verified',shareLoc:false,offline:false,live:false,
+  tab:'discover',mode:'group',filters:{verified:false,solo:false,women:false},seen:{},pending:{},crews:[],requests:[],
+  plan:{},cart:{},pickup:'express',groupOrder:false,safeAt:0,stats:{join:0,msgs:0,polls:0,songs:0,safe:0},
+  invited:false,feed:SEEDFEED,likes:{},ask:[]});
+let S=fresh();
+try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v)S={...S,...v,stats:{...S.stats,...(v.stats||{})},filters:{...S.filters,...(v.filters||{})}}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+let view=null, animNext=false, sheet=null, obStep=0, vstep=0, draft={};
+
+const fest=()=>FESTS.find(f=>f.id===S.fest);
+const initials=n=>(n||'?').trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const grad=f=>`linear-gradient(150deg,${f.colors[0]},${f.colors[1]})`;
+const daysTo=f=>f.start?Math.ceil((new Date(f.start+'T12:00:00')-new Date())/864e5):null;
+const planCount=()=>Object.keys(S.plan).filter(k=>S.plan[k]&&k.startsWith(S.fest+'|')).length;
+const statOf=id=>id==='plan'?planCount():S.stats[id]||0;
+const points=()=>120+MISSIONS.reduce((a,m)=>a+(statOf(m.id)>=m.goal?m.pts:0),0)+(S.invited?200:0);
+const crewsHere=()=>S.crews.filter(c=>c.fest===S.fest);
+const reqsHere=()=>S.requests.filter(r=>r.fest===S.fest);
+const unread=()=>crewsHere().some(c=>c.unread)||reqsHere().length>0;
+
+function match(x){
+  const sa=x.artists.filter(a=>S.artists.includes(a));
+  const sg=[...new Set(x.artists.map(a=>GENRE_OF[a]))].filter(g=>S.genres.includes(g));
+  let m=58+sa.length*12+sg.length*6+(S.solo&&x.solo?4:0)+(x.verified?3:0);
+  return {pct:Math.min(97,m),shared:sa};
+}
+
+const I={
+  disc:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>',
+  crew:'<svg class="i" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.4 3.3-5.5 6.5-5.5s5.9 2.1 6.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M17.5 14.6c2.2.3 3.6 2 4 4.4"/></svg>',
+  hub:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3 3 20h18z"/><path d="M12 3v17"/></svg>',
+  trophy:'<svg class="i" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8"/></svg>',
+  user:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6"/></svg>',
+  back:'<svg class="i" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>',
+  send:'<svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  music:'<svg class="i" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>',
+  map:'<svg class="i" viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>',
+  food:'<svg class="i" viewBox="0 0 24 24"><path d="M4 11h16a8 8 0 0 1-16 0z"/><path d="M8 7c0-1.5 1-2 1-3.5M12 7c0-1.5 1-2 1-3.5M16 7c0-1.5 1-2 1-3.5"/></svg>',
+  shield:'<svg class="i" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>',
+  chat:'<svg class="i" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+  info:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>',
+  star:'<svg class="i" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-2.9-5.4 2.9 1.1-6L3.2 9.4l6.1-.8z"/></svg>',
+  check:'<svg class="i" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg>',
+  heart:'<svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+  filter:'<svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>',
+  plus:'<svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  poll:'<svg class="i" viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg>',
+  pin:'<svg class="i" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+  flag:'<svg class="i" viewBox="0 0 24 24"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>',
+};
+
+/* ================= utils ================= */
+function toast(t){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2000)}
+function scrollEnd(){const s=document.getElementById('scroll');if(s)s.scrollTop=s.scrollHeight}
+const root=document.getElementById('root');
+
+/* ================= render ================= */
+function render(){
+  if(!S.onboarded){root.innerHTML=onboarding();bindOb();return}
+  const body={discover,crews:crewsTab,hub,missions,profile}[S.tab]();
+  root.innerHTML=`<div class="app">${body}</div>${nav()}${view?screen():''}${sheet?sheetHtml():''}`;
+  bind();
+}
+function festPill(){return `<button class="pill" data-act="festpick">${esc(fest().name)} <span style="opacity:.7">▾</span></button>`}
+function nav(){
+  const b=(id,label,ico,dot)=>`<button class="${S.tab===id?'on':''}" data-tab="${id}">${dot?'<span class="dot"></span>':''}<span class="ic">${ico}</span>${label}</button>`;
+  return `<nav class="nav"><div class="in">${b('discover','Discover',I.disc)}${b('crews','My Crews',I.crew,unread())}${b('hub','Hub',I.hub)}${b('missions','Missions',I.trophy)}${b('profile','Profile',I.user)}</div></nav>`;
+}
+
+/* ---------- Discover ---------- */
+function queue(){
+  const F=S.filters;
+  return pool(fest()).filter(x=>x.type===S.mode&&!S.seen[x.id]&&(!F.verified||x.verified)&&(!F.solo||x.type==='group'||x.solo)&&(!F.women||x.women||x.type==='person'))
+    .sort((a,b)=>match(b).pct-match(a).pct);
+}
+function dcard(x,behind){
+  const m=match(x);
+  const likes=m.shared.length?`<div class="likes">You both like <b>${m.shared.map(esc).join(', ')}</b></div>`:'';
+  const head=x.type==='group'
+    ?`<div class="name">${esc(x.name)}</div><div class="sub">${esc(x.line)}</div><div class="faces">${x.faces.map(i=>`<span>${i}</span>`).join('')}</div>`
+    :`<div class="name">${esc(x.name)}, ${x.age}</div><div class="sub">From ${esc(x.from)}</div>`;
+  return `<div class="dcard ${behind?'behind':''}" ${behind?'':'id="top"'}>
+    <div class="tp"><span class="badge">${x.type==='group'?'Group':'Person'}${x.verified?' · verified':''}</span><span class="match">${m.pct}% match</span></div>
+    <div>${head}<div class="chips">${x.chips.map(c=>`<span>${esc(c)}</span>`).join('')}</div>
+    <div class="sub" style="margin-top:10px;font-size:15px">${esc(x.bio)}</div>${likes}</div></div>`;
+}
+function discover(){
+  const q=queue(), nf=Object.values(S.filters).filter(Boolean).length;
+  const body=q.length
+    ?`<div class="stack">${q[1]?dcard(q[1],true):''}${dcard(q[0])}</div>
+      <div class="actions"><button class="btn ghost" data-act="skip">Skip</button>
+      <button class="btn lime" data-act="join">${S.mode==='group'?(q[0].approval?'Ask to join':'Join crew'):'Say hi'}</button></div>`
+    :`<div class="empty"><div class="h2">That's everyone for now</div><p class="muted">New ${S.mode==='group'?'groups':'people'} going to ${esc(fest().name)} show up here.</p>
+      <button class="btn ghost" style="margin-top:20px" data-act="again">See them again</button></div>`;
+  return `<div class="top"><div><div class="h1">Discover</div><div class="muted small" style="margin-top:4px">Going to the same festival · ranked by your music</div></div></div>
+  <div class="pad" style="display:flex;gap:8px;align-items:center;margin:10px 0 12px">${festPill()}<div style="flex:1"></div>
+    <button class="iconbtn" data-act="filters" aria-label="Filters">${I.filter}${nf?`<span class="n">${nf}</span>`:''}</button></div>
+  <div class="seg" style="margin:0 20px 14px"><button class="${S.mode==='group'?'on':''}" data-mode="group">Groups</button><button class="${S.mode==='person'?'on':''}" data-mode="person">People</button></div>
+  ${body}`;
+}
+
+/* ---------- Crews ---------- */
+function crewsTab(){
+  const list=crewsHere(), reqs=reqsHere(), pend=Object.keys(S.pending).filter(k=>k.startsWith(S.fest)&&S.pending[k]);
+  let body='';
+  if(reqs.length) body+=`<div class="sect">Join requests</div><div class="card">${reqs.map(r=>`<div class="req"><div class="avatar" style="background:var(--grad);color:#fff">${initials(r.name)}</div>
+      <div class="grow"><b>${esc(r.name)}</b><div class="muted small">wants to join ${esc(r.crewName)}${r.verified?' · verified':''}</div></div>
+      <button class="tag dark" style="padding:8px 12px" data-req="${r.id}|ok">Accept</button><button class="tag" style="padding:8px 12px" data-req="${r.id}|no">No</button></div>`).join('<div style="height:12px"></div>')}</div>`;
+  if(pend.length) body+=`<div class="sect">Waiting for approval</div><div class="card">${pend.map(k=>{const x=pool(fest()).find(p=>p.id===k);return `<div class="req"><div class="cav" style="width:40px;height:40px;font-size:12px">${initials(x.name)}</div><div class="grow"><b>${esc(x.name)}</b><div class="muted small">Request sent</div></div></div>`}).join('')}</div>`;
+  body+= list.length
+    ?`<div class="sect">Chats</div><div class="card" style="padding:2px 16px">${list.map(c=>{const last=c.msgs[c.msgs.length-1];
+      const lt=!last?'':last.type==='poll'?'📊 '+last.q:(last.who==='me'?'You: ':['sys','alert'].includes(last.who)?'':last.who+': ')+last.t;
+      return `<button class="crew" data-open="${c.id}"><div class="cav">${initials(c.name)}</div><div class="grow"><b>${esc(c.name)}</b>
+        <div class="last">${esc(lt)}</div></div>${c.unread?'<span class="udot"></span>':''}</button>`}).join('')}</div>`
+    :(!reqs.length&&!pend.length?`<div class="empty"><div class="h2">No crews yet</div><p class="muted">Join a group in Discover, or start your own crew and let people find you.</p>
+      <button class="btn lime" style="margin-top:20px" data-tab="discover">Find a crew</button></div>`:'');
+  return `<div class="top"><div class="h1">My Crews</div><button class="iconbtn" data-act="newcrew" aria-label="New crew">${I.plus}</button></div>
+  <div class="pad" style="margin:10px 0 0">${festPill()}</div><div class="pad">${body}</div>`;
+}
+
+/* ---------- Hub ---------- */
+function clashes(f){
+  const saved=f.lineup.map((a,i)=>({a:a[0],d:a[1],t:TIMES[f.lineup.filter((b,j)=>j<i&&b[1]===a[1]).length%4]})).filter(s=>S.plan[f.id+'|'+s.a]);
+  const out=[];saved.forEach((s,i)=>saved.slice(i+1).forEach(o=>{if(s.d===o.d&&s.t===o.t)out.push([s.a,o.a])}));return out;
+}
+function nowOn(f){if(!f.lineup.length)return null;const sat=f.lineup.filter(a=>a[1]==='Sat');return {now:sat[0][0],next:(sat.find(a=>S.plan[f.id+'|'+a[0]])||sat[1])[0]}}
+function hub(){
+  const f=fest(),d=daysTo(f),n=planCount(),cl=clashes(f).length,cart=Object.values(S.cart).reduce((a,b)=>a+b,0),no=nowOn(f);
+  const live=S.live&&no?`<div class="live"><span class="pulse"></span><span><b>Now:</b> ${esc(no.now)} · Main stage<br><span style="opacity:.85">Next for you: ${esc(no.next)} at 20:30</span></span></div>`:'';
+  return `<div class="top"><div class="h1">Festival Hub</div></div><div class="pad" style="margin:10px 0 0">${festPill()}</div>
+  <div class="hero" style="background:${grad(f)}">
+    <div class="small" style="opacity:.85">${esc(f.city)} · ${esc(f.venue)}</div>
+    <div class="h1">${esc(f.name)}</div>
+    <div class="small">${esc(f.dates)}${!S.live&&d>0?` · <b>${d} days to go</b>`:''}</div>
+    ${live}
+    <button class="tag" style="margin-top:12px;background:rgba(255,255,255,.22);color:#fff;font-weight:700" data-act="live">${S.live?'Back to countdown':'Preview festival day'}</button>
+  </div>
+  <div class="pad"><div class="grid2">
+    <button class="tile ${cl?'warn':''}" data-push="lineup"><span class="ico">${I.music}</span><span><b>Lineup & plan</b><span class="xs">${!f.lineup.length?'Not announced yet':cl?`${cl} clash in your plan`:`${n} set${n===1?'':'s'} saved`}</span></span></button>
+    <button class="tile" data-push="map"><span class="ico">${I.map}</span><span><b>Map</b><span class="xs">${S.live?'Live crowd levels':S.offline?'Saved offline':'Stages, water, your crew'}</span></span></button>
+    <button class="tile" data-push="food"><span class="ico">${I.food}</span><span><b>Food & drinks</b><span class="xs">${cart?`${cart} in your order`:'Order ahead, skip queues'}</span></span></button>
+    <button class="tile" data-push="ask"><span class="ico">${I.chat}</span><span><b>Ask CREW</b><span class="xs">Toilets, clashes, bags…</span></span></button>
+    <button class="tile red" data-push="safety"><span class="ico">${I.shield}</span><span><b>Safety</b><span class="xs">SOS, check-in, location</span></span></button>
+    <button class="tile" data-push="info"><span class="ico">${I.info}</span><span><b>Info</b><span class="xs">Getting there, rules</span></span></button>
+  </div></div>`;
+}
+
+/* ---------- Missions & Feed ---------- */
+function missions(){
+  const p=points(),lvl=Math.floor(p/250)+1,into=p%250;
+  const seg=S.mtab||'missions';
+  let body='';
+  if(seg==='missions'){
+    body=`<div class="card" style="padding:2px 16px">${MISSIONS.map(m=>{const v=Math.min(statOf(m.id),m.goal),done=v>=m.goal;
+      return `<div class="mission ${done?'done':''}"><span class="chk">${done?I.check:''}</span><div class="grow"><b style="font-size:15px">${m.label}</b>
+        ${done?'<div class="muted xs">Done</div>':`<div class="bar-track"><div class="bar-fill" style="width:${v/m.goal*100}%"></div></div><div class="muted xs" style="margin-top:4px">${v}/${m.goal}</div>`}</div>
+        <span class="tag ${done?'lime':''}">+${m.pts}</span></div>`}).join('')}</div>
+      <div class="card" style="margin-top:12px;display:flex;gap:12px;align-items:center"><div class="grow" style="flex:1"><b>Invite friends</b><div class="muted small">+200 pts when a friend joins with your code</div>
+        <div class="tag dark" style="margin-top:8px;font-weight:700">CREW-${esc(S.name.toUpperCase()).slice(0,8)}</div></div>
+        <button class="btn lime sm" style="width:auto;padding:0 18px" data-act="invite">${S.invited?'✓ Sent':'Share'}</button></div>`;
+  }else{
+    body=`<button class="btn dark" style="margin-bottom:12px" data-act="post">Share a moment</button>`+S.feed.map(x=>`<div class="post"><div class="img" style="background:${x.g}">${esc(x.crew)}</div>
+      <div class="meta"><div class="avatar" style="width:32px;height:32px;font-size:12px">${initials(x.who)}</div><div class="grow small"><b>${esc(x.who)}</b> ${esc(x.cap)}</div>
+      <button class="heart ${S.likes[x.id]?'on':''}" data-like="${x.id}">${I.heart}${x.likes+(S.likes[x.id]?1:0)}</button></div></div>`).join('');
+  }
+  return `<div class="top"><div class="h1">Missions</div></div>
+  <div class="lvl"><div class="small" style="opacity:.75">Level ${lvl}</div><div class="pts">${p} pts</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${into/250*100}%"></div></div><div class="xs" style="opacity:.7;margin-top:6px">${250-into} pts to level ${lvl+1}</div></div>
+  <div class="seg" style="margin:0 20px 14px"><button class="${seg==='missions'?'on':''}" data-mtab="missions">Missions</button><button class="${seg==='feed'?'on':''}" data-mtab="feed">Feed</button></div>
+  <div class="pad">${body}</div>`;
+}
+
+/* ---------- Profile ---------- */
+function profile(){
+  const pol={everyone:'Everyone at the festival',verified:'Verified people only',crews:'My crews only'};
+  return `<div class="top"><div class="h1">Profile</div></div>
+  <div class="prof"><div class="avatar">${initials(S.name)}</div><div class="h2" style="margin-top:10px">${esc(S.name)}</div>
+    <div class="muted small">${esc(S.age)} · ${esc(S.city)}${S.solo?' · going solo':''}</div>
+    ${S.verified?`<span class="vbadge">${I.check} Verified</span>`:''}</div>
+  <div class="pad">
+    ${S.verified?'':`<div class="card" style="margin-top:16px;display:flex;gap:12px;align-items:center"><div style="flex:1"><b>Get verified</b><div class="muted small">68% of students feel safer with verified profiles. Verified people get matched first.</div></div>
+      <button class="btn lime sm" style="width:auto;padding:0 18px" data-act="verify">Verify</button></div>`}
+    <div class="sect">Your music</div>
+    <div class="card"><div class="chiprow">${S.genres.length?S.genres.map(g=>`<span class="chip on">${g}</span>`).join(''):'<span class="muted small">No genres yet</span>'}</div>
+      <div class="muted small" style="margin:14px 0 8px">${S.artists.length} favourite artist${S.artists.length===1?'':'s'}</div>
+      <div class="chiprow">${S.artists.slice(0,8).map(a=>`<span class="chip">${esc(a)}</span>`).join('')}</div>
+      <div style="display:flex;gap:8px;margin-top:14px"><button class="btn soft sm" style="background:var(--bg)" data-act="editmusic">Edit</button><button class="btn sm" style="background:#1ED760;border-color:#1ED760" data-act="spotify">Import from Spotify</button></div></div>
+    <div class="sect">Festival style</div>
+    <div class="card"><div class="chiprow">${['Chill','Party','Front row','Camping'].map(v=>`<button class="chip ${S.vibe.includes(v)?'on':''}" data-pvibe="${v}">${v}</button>`).join('')}</div></div>
+    <div class="sect">Privacy & safety</div>
+    <div class="card" style="padding:2px 16px">
+      <button class="lrow" data-act="policy"><span class="grow"><b>Who can message me</b><div class="muted small">${pol[S.msgPolicy]}</div></span><span class="muted">›</span></button>
+      <div class="toggle"><span class="grow"><b>I'm going solo</b><div class="muted small">Shows you to other solo people first</div></span><button class="sw ${S.solo?'on':''}" data-sw="solo"></button></div>
+      <div class="toggle"><span class="grow"><b>Live location</b><div class="muted small">Only my crews, only during the festival</div></span><button class="sw ${S.shareLoc?'on':''}" data-sw="shareLoc"></button></div>
+      <button class="lrow" data-act="report"><span class="grow"><b>Report someone</b></span><span class="muted">›</span></button>
+    </div>
+    <button class="btn ghost sm" style="margin-top:20px;border-color:var(--line)" data-act="reset">Restart demo</button>
+  </div>`;
+}
+
+/* ---------- pushed screens ---------- */
+function screen(){
+  const {name,arg}=view, f=fest();
+  let title='',sub='',body='',foot='';
+  if(name==='chat'){
+    const c=S.crews.find(x=>x.id===arg);
+    title=esc(c.name); sub=`${c.members.length+1} members · ${c.playlist.length} song${c.playlist.length===1?'':'s'} in playlist`;
+    const tot=c.meet.votes.reduce((a,b)=>a+b,0)||1;
+    body=`<div class="meet"><div class="k">Meet-up · before the gates, 17:00</div><div style="font-weight:700;margin-top:6px">Where do we meet?</div>
+      ${c.meet.opts.map((o,i)=>`<button class="opt ${c.meet.mine===i?'on':''}" data-meet="${i}"><span class="fill" style="width:${c.meet.votes[i]/tot*100}%"></span><span class="grow">${esc(o)}</span><span class="xs">${c.meet.votes[i]}</span></button>`).join('')}
+      <div class="xs" style="opacity:.7;margin-top:10px">CREW Spots are public partner bars and cafés.</div></div>
+      ${c.msgs.filter(m=>m.who==='me').length<1?`<button class="ice" data-ice="${c.ice}"><span style="font-size:18px">💬</span><span><b>Icebreaker</b><br>${esc(ICE[c.ice])}</span></button>`:''}
+      ${c.msgs.map((m,mi)=>{
+        if(m.type==='poll'){const t=m.votes.reduce((a,b)=>a+b,0)||1;return `<div class="pollmsg"><div class="muted xs">${esc(m.who==='me'?'You':m.who)} · poll</div><b>${esc(m.q)}</b>
+          ${m.opts.map((o,i)=>`<button class="opt ${m.mine===i?'on':''}" data-pvote="${mi}|${i}"><span class="fill" style="width:${m.votes[i]/t*100}%"></span><span class="grow">${esc(o)}</span><span class="xs">${m.votes[i]}</span></button>`).join('')}</div>`}
+        if(m.who==='sys')return `<div class="msg sys"><div class="b">${esc(m.t)}</div></div>`;
+        if(m.who==='alert')return `<div class="msg sys alert"><div class="b">${esc(m.t)}</div></div>`;
+        return `<div class="msg ${m.who==='me'?'me':''}">${m.who!=='me'?`<div class="who">${esc(m.who)}</div>`:''}<div class="b">${esc(m.t)}</div></div>`}).join('')}`;
+    foot=`<form class="compose" id="compose"><button type="button" class="plus" data-act="chatplus" aria-label="More">${I.plus}</button><input id="msg" placeholder="Message" autocomplete="off"><button class="send" aria-label="Send">${I.send}</button></form>`;
+  }
+  if(name==='lineup'){
+    title='Lineup & plan';
+    if(!f.lineup.length) body=`<div class="empty"><div class="h2">Not out yet</div><p class="muted">${esc(f.name)} hasn't announced the lineup. You'll get a notification when it drops.</p></div>`;
+    else{
+      const cl=clashes(f);
+      body=`<div class="seg" style="margin-bottom:6px"><button class="${(S.ltab||'all')==='all'?'on':''}" data-ltab="all">Full lineup</button><button class="${S.ltab==='mine'?'on':''}" data-ltab="mine">My plan (${planCount()})</button></div>
+        ${cl.map(c=>`<div class="clash">⚠ <b>${esc(c[0])}</b> and <b>${esc(c[1])}</b> play at the same time</div>`).join('')}`;
+      const byDay={};f.lineup.forEach(([a,d])=>{(byDay[d]=byDay[d]||[]).push(a)});
+      body+=Object.entries(byDay).map(([d,arr])=>{const rows=arr.map((a,j)=>{const k=f.id+'|'+a;if(S.ltab==='mine'&&!S.plan[k])return '';const mine=S.artists.includes(a);
+        return `<div class="set"><span class="time">${TIMES[j%4]}</span><span class="grow"><b>${esc(a)}</b><br><span class="muted small">${STAGES[j%4]}${mine?' · in your artists':''}</span></span>
+        <button class="star ${S.plan[k]?'on':''}" data-star="${esc(k)}" aria-label="Save">${I.star}</button></div>`}).join('');
+        return rows?`<div class="day">${{Thu:'Thursday',Fri:'Friday',Sat:'Saturday'}[d]}</div>${rows}`:''}).join('')||`<p class="muted" style="margin-top:20px">Nothing saved yet. Tap the star on a set to add it.</p>`;
+      body+=`<p class="muted xs" style="margin-top:14px">Set times and stages are placeholders until the festival publishes them.</p>`;
+    }
+  }
+  if(name==='map'){
+    title='Map';
+    const c=l=>!S.live?'#13111F':l==='hi'?'#E5484D':l==='mid'?'#F2A20C':'#22A55B';
+    body=`<div class="map"><svg viewBox="0 0 340 300" width="100%" style="display:block">
+      <rect width="340" height="300" fill="#E4F0D0"/><path d="M0 250 Q170 220 340 260 L340 300 L0 300Z" fill="#BFE0F2"/>
+      <path d="M40 40 L300 40 L300 210 L40 210Z" fill="none" stroke="#B9C9A0" stroke-width="2" stroke-dasharray="6 6"/>
+      <path d="M60 180 C120 120 200 140 280 70" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+      <g font-family="DM Sans, system-ui, sans-serif" font-size="11" font-weight="700" text-anchor="middle">
+        <rect x="58" y="52" width="86" height="40" rx="10" fill="${c('hi')}"/><text x="101" y="76" fill="#fff">Main stage</text>
+        <rect x="206" y="52" width="76" height="36" rx="10" fill="${c('mid')}"/><text x="244" y="74" fill="#fff">Stage 2</text>
+        <rect x="200" y="150" width="76" height="36" rx="10" fill="${c('lo')}"/><text x="238" y="172" fill="#fff">Stage 3</text>
+        <circle cx="150" cy="140" r="9" fill="#3B82F6"/><circle cx="270" cy="120" r="9" fill="#3B82F6"/>
+        <circle cx="120" cy="190" r="10" fill="#E5484D"/><text x="120" y="194" fill="#fff" font-size="12">+</text>
+        <circle cx="70" cy="140" r="9" fill="#9A7B4F"/>
+        <path d="M95 130 l8 -14 h-16z" fill="#7B4DFF" transform="translate(0,0)"/><text x="95" y="112" fill="#7B4DFF">Meet</text>
+        <circle cx="180" cy="110" r="8" fill="#7B4DFF" stroke="#fff" stroke-width="3"/><circle cx="168" cy="122" r="8" fill="#FF6A3D" stroke="#fff" stroke-width="3"/>
+        <rect x="40" y="215" width="70" height="22" rx="11" fill="#fff"/><text x="75" y="230" fill="#13111F">Entrance</text>
+      </g></svg></div>
+      <div class="legend"><span><i style="background:#3B82F6"></i>Water</span><span><i style="background:#E5484D"></i>First aid</span><span><i style="background:#9A7B4F"></i>Toilets</span><span><i style="background:#7B4DFF"></i>Your crew</span></div>
+      ${S.live?`<div class="card" style="margin-top:14px"><b>Crowd right now</b><div class="legend" style="margin-top:8px"><span><i style="background:#E5484D"></i>Main stage · packed</span><span><i style="background:#F2A20C"></i>Stage 2 · busy</span><span><i style="background:#22A55B"></i>Stage 3 · quiet</span></div></div>`:''}
+      <button class="btn ${S.offline?'soft':'dark'}" style="margin-top:14px" data-act="offline">${S.offline?'✓ Saved for offline':'Save map for offline'}</button>
+      <p class="muted small" style="margin-top:8px;text-align:center">Signal drops at festivals. A saved map still works.</p>`;
+  }
+  if(name==='food'){
+    title='Food & drinks';
+    const total=FOOD.flatMap(s=>s.items).reduce((a,[n,p])=>a+(S.cart[n]||0)*p,0)+(S.pickup==='spot'?3:0);
+    const hasCrew=crewsHere().length>0;
+    body=`<div class="seg"><button class="${S.pickup==='express'?'on':''}" data-pickup="express">Express pickup</button><button class="${S.pickup==='spot'?'on':''}" data-pickup="spot">To my spot +€3</button></div>
+      <p class="muted small" style="margin-top:8px">${S.pickup==='express'?'No-queue counter by the main entrance.':'Brought to you in the crowd. Uses your live location.'}</p>
+      <div class="card" style="margin-top:12px;padding:2px 16px"><div class="toggle"><span class="grow"><b>Group order with my crew</b><div class="muted small">${hasCrew?'Your crew can add items, one pickup':'Join a crew to order together'}</div></span><button class="sw ${S.groupOrder?'on':''}" data-sw="groupOrder" ${hasCrew?'':'disabled style="opacity:.4"'}></button></div></div>`+
+      FOOD.map(s=>`<div class="day">${s.s}</div>`+s.items.map(([n,p])=>{const q=S.cart[n]||0;
+      return `<div class="item"><span class="grow"><b>${n}</b><br><span class="muted small">€${String(p).replace('.',',')}</span></span>
+      <span class="qty">${q?`<button data-qty="${n}|-1">−</button><b>${q}</b>`:''}<button data-qty="${n}|1">+</button></span></div>`}).join('')).join('');
+    foot=total>(S.pickup==='spot'?3:0)?`<div class="footbar"><button class="btn lime" data-act="order">${S.groupOrder?'Send group order':'Order'} · €${total.toFixed(2)}</button></div>`:'';
+  }
+  if(name==='ask'){
+    title='Ask CREW'; sub=`About ${f.name}`;
+    const qs=['Where are the toilets?','Any clashes in my plan?','What\'s next for me?','Can I bring a bag?','Is it cashless?'];
+    body=(S.ask.length?'':`<div class="msg"><div class="who">CREW</div><div class="b">Hi ${esc(S.name)}, ask me anything about ${esc(f.name)}.</div></div>`)+
+      S.ask.map(m=>`<div class="msg ${m.me?'me':''}">${m.me?'':'<div class="who">CREW</div>'}<div class="b">${esc(m.t)}</div></div>`).join('');
+    foot=`<div class="qchips">${qs.map(q=>`<button data-askq="${esc(q)}">${esc(q)}</button>`).join('')}</div>
+      <form class="compose" id="askform"><input id="askin" placeholder="Ask about the festival…" autocomplete="off"><button class="send" aria-label="Send">${I.send}</button></form>`;
+  }
+  if(name==='safety'){
+    title='Safety';
+    const mins=S.safeAt?Math.round((Date.now()-S.safeAt)/60000):null;
+    body=`<button class="sos" data-act="sos">SOS<small>Calls 112, alerts security and your crew</small></button>
+      <div class="grid2" style="margin-top:12px">
+        <button class="btn lime" style="height:62px" data-act="safe">I'm safe</button>
+        <button class="btn dark" style="height:62px" data-act="lost">I'm lost</button></div>
+      <p class="muted small" style="margin-top:8px;text-align:center">${mins!==null?`Last check-in ${mins<1?'just now':mins+' min ago'}`:'Both go straight to your crews'}</p>
+      <div class="card" style="margin-top:14px;padding:2px 16px">
+        <div class="toggle"><span class="grow"><b>Share live location</b><div class="muted small">Only my crews, only during the festival</div></span><button class="sw ${S.shareLoc?'on':''}" data-sw="shareLoc"></button></div>
+        <div class="toggle"><span class="grow"><b>First aid</b><div class="muted small">Next to the main entrance, open all night</div></span></div>
+        <div class="toggle"><span class="grow"><b>Festival security</b><div class="muted small">Any staff in a yellow vest, or the info desk</div></span></div>
+        <button class="lrow" data-act="report"><span class="grow"><b>Report someone</b></span><span class="muted">›</span></button>
+      </div>`;
+  }
+  if(name==='info'){
+    title='Info';
+    body=`<div class="card" style="padding:2px 16px">
+      <div class="toggle"><span class="grow"><b>Getting there</b><div class="muted small">${f.id==='madcool'?'Metro L3 to Villaverde Alto, then shuttle':f.id==='sonar'?'By Night: metro L1/L8 to Europa | Fira':'Metro L4 to El Maresme | Fòrum, or tram T4'}</div></span></div>
+      <div class="toggle"><span class="grow"><b>Payments</b><div class="muted small">Card or phone at bars and food stalls</div></span></div>
+      <div class="toggle"><span class="grow"><b>Bags</b><div class="muted small">Small bags OK. No glass, no cans, no big umbrellas.</div></span></div>
+      <div class="toggle"><span class="grow"><b>Lost property</b><div class="muted small">Info desk by the main entrance</div></span></div></div>
+      <p class="muted xs" style="margin-top:12px">Check the official ${esc(f.name)} site for final rules.</p>`;
+  }
+  const a=animNext;animNext=false;
+  return `<div class="screen${a?' anim':''}"><div class="wrap"><div class="bar"><button class="back" data-act="back">${I.back}</button>
+    <div style="flex:1;min-width:0"><div class="h2" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${title}</div>${sub?`<div class="muted xs">${esc(sub)}</div>`:''}</div></div>
+    <div class="scroll" id="scroll">${body}</div>${foot}</div></div>`;
+}
+
+/* ---------- sheets ---------- */
+function sheetHtml(){
+  let b='';
+  const f=fest();
+  if(sheet==='festpick') b=`<div class="h2" style="margin-bottom:6px">Your festival</div>`+FESTS.map(x=>`<button class="fest ${x.id===S.fest?'on':''}" data-fest="${x.id}">
+      <span class="fl" style="background:${grad(x)}">${x.short}</span><span><b>${x.name}</b><br><span class="muted small">${x.city} · ${x.dates}</span></span></button>`).join('');
+  if(sheet==='filters') b=`<div class="h2">Filters</div><div class="card" style="margin-top:14px;padding:2px 16px">
+      <div class="toggle"><span class="grow"><b>Verified only</b></span><button class="sw ${S.filters.verified?'on':''}" data-filter="verified"></button></div>
+      <div class="toggle"><span class="grow"><b>Solo goers</b><div class="muted small">People going alone, like you</div></span><button class="sw ${S.filters.solo?'on':''}" data-filter="solo"></button></div>
+      <div class="toggle"><span class="grow"><b>Women-only crews</b></span><button class="sw ${S.filters.women?'on':''}" data-filter="women"></button></div></div>
+      <button class="btn lime" style="margin-top:16px" data-act="close">Show results</button>`;
+  if(sheet==='newcrew') b=`<div class="h2">Start a crew</div><p class="muted small" style="margin-top:4px">For ${esc(f.name)}. People in Discover can find it.</p>
+      <input class="field" id="crewname" placeholder="Crew name, e.g. Sunset Squad" maxlength="28">
+      <div class="card" style="margin-top:12px;padding:2px 16px">
+        <div class="toggle"><span class="grow"><b>I approve who joins</b></span><button class="sw ${draft.approval!==false?'on':''}" data-draft="approval"></button></div>
+        <div class="toggle"><span class="grow"><b>Women only</b></span><button class="sw ${draft.women?'on':''}" data-draft="women"></button></div>
+        <div class="toggle"><span class="grow"><b>Verified only</b></span><button class="sw ${draft.verifiedOnly?'on':''}" data-draft="verifiedOnly"></button></div></div>
+      <button class="btn lime" style="margin-top:16px" data-act="createcrew">Create crew</button>`;
+  if(sheet==='chatplus'){const c=S.crews.find(x=>x.id===view.arg);
+    b=`<div class="h2" style="margin-bottom:6px">Add to chat</div>
+      <button class="actrow" data-act="mkpoll"><span class="ico">${I.poll}</span><span><b>Poll</b><div class="muted small">Let the crew vote</div></span></button>
+      <button class="actrow" data-act="song"><span class="ico">${I.music}</span><span><b>Add a song to the playlist</b><div class="muted small">${c.playlist.length} so far</div></span></button>
+      <button class="actrow" data-act="safe"><span class="ico" style="color:var(--green)">${I.check}</span><span><b>I'm here & safe</b><div class="muted small">Check in with your crew</div></span></button>
+      <button class="actrow" data-act="lost"><span class="ico" style="color:var(--red)">${I.pin}</span><span><b>I'm lost</b><div class="muted small">Sends your location to the crew</div></span></button>`;}
+  if(sheet==='mkpoll') b=`<div class="h2">New poll</div><input class="field" id="pq" placeholder="Question" value="Metro or walk from the meet-up?">
+      <input class="field" id="po1" placeholder="Option 1" value="Metro"><input class="field" id="po2" placeholder="Option 2" value="Walk">
+      <button class="btn lime" style="margin-top:16px" data-act="sendpoll">Send poll</button>`;
+  if(sheet==='verify'){
+    const steps=[['Selfie check','Match your face to your profile photo','Take a selfie'],['Your ID','Passport, ID card or driving licence','Add a photo of your ID']];
+    b=vstep<2?`<div class="steps"><i class="on"></i><i class="${vstep>0?'on':''}"></i></div><div class="h2" style="margin-top:10px">${steps[vstep][0]}</div><p class="muted" style="margin-top:4px">${steps[vstep][1]}</p>
+      <div style="height:150px;border-radius:22px;border:2px dashed #CFC7B6;display:grid;place-items:center;margin:16px 0" class="muted">${vstep?'🪪':'🤳'}</div>
+      <button class="btn lime" data-act="vnext">${steps[vstep][2]}</button><p class="muted xs" style="text-align:center;margin-top:10px">Demo: uses a sample photo. Your ID is never shown to other people.</p>`
+      :`<div class="empty"><div class="h2">Checking…</div><p class="muted">Usually takes under a minute</p></div>`;
+  }
+  if(sheet==='policy'){const o=[['everyone','Everyone at the festival'],['verified','Verified people only'],['crews','My crews only']];
+    b=`<div class="h2">Who can message me</div><p class="muted small" style="margin-top:4px">Crew chats always work for members.</p>`+o.map(([k,l])=>`<button class="fest ${S.msgPolicy===k?'on':''}" data-policy="${k}"><span><b>${l}</b></span></button>`).join('');}
+  if(sheet==='report') b=`<div class="h2">Report someone</div><p class="muted small" style="margin-top:4px">Our safety team reviews every report within 24h.</p>
+      <div class="chiprow" style="margin-top:14px">${['Harassment','Inappropriate messages','Spam or scam','Feels unsafe'].map((r,i)=>`<button class="chip ${draft.reason===r?'on':''}" data-reason="${r}" style="background:var(--card)">${r}</button>`).join('')}</div>
+      <button class="btn lime" style="margin-top:18px" data-act="sendreport" ${draft.reason?'':'disabled'}>Send report</button>`;
+  if(sheet==='editmusic'){const A=[...new Set([...artistsFor(f),...FAVS])];
+    b=`<div class="h2">Your music</div><div class="label">Genres</div><div class="chiprow">${GENRES.map(g=>`<button class="chip ${S.genres.includes(g)?'on':''}" style="background:${S.genres.includes(g)?'var(--lime)':'var(--card)'}" data-genre="${g}">${g}</button>`).join('')}</div>
+      <div class="label">Artists</div><div class="chiprow">${A.map(a=>`<button class="chip ${S.artists.includes(a)?'on':''}" style="background:${S.artists.includes(a)?'var(--lime)':'var(--card)'}" data-artist="${esc(a)}">${esc(a)}</button>`).join('')}</div>
+      <button class="btn lime" style="margin-top:18px" data-act="close">Done</button>`;}
+  if(sheet==='post') b=`<div class="h2">Share a moment</div><p class="muted small" style="margin-top:4px">Shows in the feed for people going to ${esc(f.name)}.</p>
+      <div style="height:140px;border-radius:22px;background:var(--grad);margin-top:14px;display:grid;place-items:center;color:#fff;font-weight:700">📷 Photo (demo)</div>
+      <input class="field" id="cap" placeholder="Write a caption" maxlength="80"><button class="btn lime" style="margin-top:14px" data-act="sendpost">Post</button>`;
+  if(sheet==='sos') b=`<div class="h2" style="margin-bottom:8px">Call for help?</div><p class="muted">We'll call 112, send your location to festival security and alert your crews.</p>
+      <button class="sos" style="height:62px;font-size:20px;margin-top:18px" data-act="sosgo">Call 112</button><button class="btn ghost" style="margin-top:10px" data-act="close">Cancel</button>`;
+  return `<div class="shade" data-act="shade"><div class="sheet"><div class="grab"></div>${b}</div></div>`;
+}
+
+/* ---------- onboarding (3 short steps) ---------- */
+function onboarding(){
+  const st=`<div class="steps">${[0,1,2].map(i=>`<i class="${i<=obStep?'on':''}"></i>`).join('')}</div>`;
+  if(obStep===0) return `<div class="ob app"><div class="logo">CREW</div><p class="muted" style="margin-top:6px">Find your people. Feel the music.</p>${st}
+    <div class="label">Which festival are you going to?</div>
+    ${FESTS.map(f=>`<button class="fest ${f.id===S.fest?'on':''}" data-obfest="${f.id}"><span class="fl" style="background:${grad(f)}">${f.short}</span><span><b>${f.name}</b><br><span class="muted small">${f.city} · ${f.dates}</span></span></button>`).join('')}
+    <div style="flex:1"></div><button class="btn lime" style="margin-top:24px" data-ob="next">Next</button></div>`;
+  if(obStep===1) return `<div class="ob app"><button class="back" data-ob="back">${I.back}</button>${st}<div class="h1" style="margin-top:8px">About you</div>
+    <div class="label">First name</div><input class="field" id="name" value="${esc(S.name)}" placeholder="e.g. Gleb" autocomplete="given-name">
+    <div class="label">Age</div><div class="chiprow">${['18-21','22-25','26-30','31+'].map(a=>`<button class="chip ${S.age===a?'on':''}" data-age="${a}">${a}</button>`).join('')}</div>
+    <div class="card" style="margin-top:22px;padding:2px 16px"><div class="toggle"><span class="grow"><b>I'm going solo</b><div class="muted small">We match you with other solo people and open groups</div></span><button class="sw ${S.solo?'on':''}" data-sw="solo"></button></div></div>
+    <div style="flex:1"></div><button class="btn lime" style="margin-top:24px" data-ob="next2" ${S.name.trim()?'':'disabled'}>Next</button></div>`;
+  const f=fest(),A=artistsFor(f);
+  return `<div class="ob app"><button class="back" data-ob="back">${I.back}</button>${st}<div class="h1" style="margin-top:8px">Your music</div>
+    <p class="muted small" style="margin-top:6px">So we can match you with the right crew.</p>
+    <div class="label">Genres</div><div class="chiprow">${GENRES.map(g=>`<button class="chip ${S.genres.includes(g)?'on':''}" data-genre="${g}">${g}</button>`).join('')}</div>
+    <div class="label">${f.lineup.length?`Who are you going to see?`:'Artists you love'}</div><div class="chiprow">${A.map(a=>`<button class="chip ${S.artists.includes(a)?'on':''}" data-artist="${esc(a)}">${esc(a)}</button>`).join('')}</div>
+    <div style="flex:1"></div><button class="btn lime" style="margin-top:24px" data-ob="done">Find my crew</button></div>`;
+}
+function toggleArr(arr,v){return arr.includes(v)?arr.filter(x=>x!==v):[...arr,v]}
+function bindOb(){
+  const on=(sel,fn)=>root.querySelectorAll(sel).forEach(b=>b.onclick=()=>fn(b));
+  on('[data-obfest]',b=>{S.fest=b.dataset.obfest;save();render()});
+  on('[data-age]',b=>{S.age=b.dataset.age;save();render()});
+  on('[data-genre]',b=>{S.genres=toggleArr(S.genres,b.dataset.genre);save();b.classList.toggle('on')});
+  on('[data-artist]',b=>{S.artists=toggleArr(S.artists,b.dataset.artist);save();b.classList.toggle('on')});
+  on('[data-sw]',b=>{S[b.dataset.sw]=!S[b.dataset.sw];save();b.classList.toggle('on')});
+  const n=root.querySelector('#name');if(n)n.oninput=()=>{S.name=n.value;save();root.querySelector('[data-ob="next2"]').disabled=!n.value.trim()};
+  on('[data-ob]',b=>{const a=b.dataset.ob;
+    if(a==='next'){obStep=1;render();setTimeout(()=>root.querySelector('#name')?.focus(),50)}
+    if(a==='next2'&&S.name.trim()){S.name=S.name.trim();obStep=2;render()}
+    if(a==='back'){obStep--;render()}
+    if(a==='done'){S.onboarded=true;S.tab='discover';save();render()}});
+}
+
+/* ================= actions ================= */
+function makeCrew(x){
+  const f=fest(); if(S.crews.find(c=>c.id===x.id))return;
+  const members=x.type==='group'?x.members:[x.name];
+  S.crews.unshift({id:x.id,fest:f.id,name:x.name,members,ice:Math.floor(Math.random()*ICE.length),unread:true,playlist:[],
+    meet:{opts:[SPOTS[f.id],'Main entrance'],votes:[x.type==='group'?2:0,x.type==='group'?1:0],mine:null},
+    msgs:[{who:'sys',t:x.type==='group'?`You joined ${x.name}`:`You said hi to ${x.name}`},
+      {who:members[0],t:x.type==='group'?`Welcome! We're voting on where to meet before ${f.name} 👇`:'Hey! Nice to find someone else going alone 🙌'}]});
+  S.stats.join++;
+}
+function reply(c,t){
+  const who=c.members[Math.floor(Math.random()*c.members.length)];
+  setTimeout(()=>{c.msgs.push({who,t:t||REPLIES[Math.floor(Math.random()*REPLIES.length)]});if(!(view&&view.arg===c.id))c.unread=true;save();render();if(view&&view.arg===c.id)scrollEnd()},1100);
+}
+function swipe(dir){
+  const q=queue(); if(!q.length)return; const x=q[0], el=document.getElementById('top');
+  if(el){el.style.transform=`translateX(${dir*120}%) rotate(${dir*12}deg)`;el.style.opacity='0'}
+  setTimeout(()=>{
+    S.seen[x.id]=true;
+    if(dir>0){
+      if(x.approval){S.pending[x.id]=true;toast(`Request sent to ${x.name}`);
+        setTimeout(()=>{S.pending[x.id]=false;makeCrew(x);save();render();toast(`${x.name} accepted you`)},3500)}
+      else{makeCrew(x);toast(x.type==='group'?`Joined ${x.name}`:`Said hi to ${x.name}`)}
+    }
+    save();render();
+  },220);
+}
+function sendToCrews(t,type){
+  const cs=view&&view.name==='chat'?[S.crews.find(c=>c.id===view.arg)]:crewsHere();
+  cs.forEach(c=>c.msgs.push({who:type||'sys',t}));return cs.length;
+}
+function answer(q){
+  const f=fest(),l=q.toLowerCase(),cl=clashes(f);
+  if(l.includes('toilet'))return 'Closest toilets are left of Stage 2 and by the main entrance. The ones by Stage 3 usually have shorter queues.';
+  if(l.includes('clash'))return !f.lineup.length?'The lineup isn\'t out yet, so no clashes to check.':cl.length?cl.map(c=>`${c[0]} and ${c[1]} play at the same time.`).join(' ')+' Pick one, or split with your crew.':'No clashes in your plan.';
+  if(l.includes('next')){const n=f.lineup.find(a=>S.plan[f.id+'|'+a[0]]);return n?`Next in your plan: ${n[0]} on ${{Thu:'Thursday',Fri:'Friday',Sat:'Saturday'}[n[1]]}.`:'Your plan is empty. Save some sets in Lineup & plan.'}
+  if(l.includes('bag'))return 'Small bags and backpacks are fine. No glass, cans or big umbrellas. Check the official site for exact sizes.';
+  if(l.includes('cash')||l.includes('pay'))return 'Yes, bars and food stalls take card and phone payments.';
+  if(l.includes('water'))return 'Free water points are next to Stage 2 and in the middle of the site. Look for the blue dots on the map.';
+  return 'Not sure about that one. The info desk by the main entrance can help.';
+}
+
+function bind(){
+  const on=(sel,fn)=>root.querySelectorAll(sel).forEach(b=>b.onclick=e=>{e.stopPropagation();fn(b,e)});
+  on('[data-tab]',b=>{S.tab=b.dataset.tab;view=null;sheet=null;save();render();window.scrollTo(0,0)});
+  on('[data-mode]',b=>{S.mode=b.dataset.mode;save();render()});
+  on('[data-mtab]',b=>{S.mtab=b.dataset.mtab;save();render()});
+  on('[data-ltab]',b=>{S.ltab=b.dataset.ltab;save();render()});
+  on('[data-open]',b=>{const c=S.crews.find(x=>x.id===b.dataset.open);c.unread=false;save();view={name:'chat',arg:c.id};animNext=true;render();scrollEnd()});
+  on('[data-push]',b=>{view={name:b.dataset.push};animNext=true;render();if(b.dataset.push==='ask')scrollEnd()});
+  on('[data-fest]',b=>{S.fest=b.dataset.fest;sheet=null;save();render()});
+  on('[data-filter]',b=>{S.filters[b.dataset.filter]=!S.filters[b.dataset.filter];save();b.classList.toggle('on')});
+  on('[data-draft]',b=>{const k=b.dataset.draft;draft[k]=k==='approval'?draft[k]===false:!draft[k];b.classList.toggle('on')});
+  on('[data-star]',b=>{const k=b.dataset.star;S.plan[k]=!S.plan[k];save();const st=document.getElementById('scroll').scrollTop;render();document.getElementById('scroll').scrollTop=st});
+  on('[data-qty]',b=>{const[n,d]=b.dataset.qty.split('|');S.cart[n]=Math.max(0,(S.cart[n]||0)+ +d);save();const st=document.getElementById('scroll').scrollTop;render();document.getElementById('scroll').scrollTop=st});
+  on('[data-pickup]',b=>{S.pickup=b.dataset.pickup;save();render()});
+  on('[data-sw]',b=>{if(b.disabled)return;S[b.dataset.sw]=!S[b.dataset.sw];save();b.classList.toggle('on')});
+  on('[data-pvibe]',b=>{S.vibe=toggleArr(S.vibe,b.dataset.pvibe);save();b.classList.toggle('on')});
+  on('[data-genre]',b=>{S.genres=toggleArr(S.genres,b.dataset.genre);save();render()});
+  on('[data-artist]',b=>{S.artists=toggleArr(S.artists,b.dataset.artist);save();render()});
+  on('[data-policy]',b=>{S.msgPolicy=b.dataset.policy;sheet=null;save();render()});
+  on('[data-reason]',b=>{draft.reason=b.dataset.reason;render()});
+  on('[data-like]',b=>{S.likes[b.dataset.like]=!S.likes[b.dataset.like];save();render()});
+  on('[data-req]',b=>{const[id,v]=b.dataset.req.split('|');const r=S.requests.find(x=>x.id===id);S.requests=S.requests.filter(x=>x.id!==id);
+    const c=S.crews.find(x=>x.id===r.crew);
+    if(v==='ok'&&c){c.members.push(r.name);c.msgs.push({who:'sys',t:`${r.name} joined`});reply(c,`Hi! Thanks for letting me in 🙌`);toast(`${r.name} is in your crew`)}else toast('Request declined');save();render()});
+  on('[data-meet]',b=>{const c=S.crews.find(x=>x.id===view.arg),i=+b.dataset.meet;if(c.meet.mine!==null)c.meet.votes[c.meet.mine]--;
+    if(c.meet.mine===i)c.meet.mine=null;else{c.meet.mine=i;c.meet.votes[i]++}save();render()});
+  on('[data-pvote]',b=>{const c=S.crews.find(x=>x.id===view.arg);const[mi,i]=b.dataset.pvote.split('|').map(Number);const m=c.msgs[mi];
+    if(m.mine!==null&&m.mine!==undefined)m.votes[m.mine]--;m.mine=i;m.votes[i]++;save();render()});
+  on('[data-ice]',b=>{const i=document.getElementById('msg');i.value=ICE[+b.dataset.ice];i.focus()});
+  on('[data-askq]',b=>{askSend(b.dataset.askq)});
+  on('[data-act]',(b,e)=>{
+    const a=b.dataset.act, f=fest();
+    if(a==='shade'){if(e.target===b){sheet=null;render()}return}
+    if(a==='close'){sheet=null;render()}
+    if(['festpick','filters','policy','editmusic','post','chatplus','mkpoll'].includes(a)){sheet=a;render()}
+    if(a==='newcrew'){draft={};sheet='newcrew';render();setTimeout(()=>document.getElementById('crewname')?.focus(),60)}
+    if(a==='report'){draft={};sheet='report';render()}
+    if(a==='skip')swipe(-1);
+    if(a==='join')swipe(1);
+    if(a==='again'){pool(f).forEach(x=>{if(x.type===S.mode&&!S.crews.find(c=>c.id===x.id)&&!S.pending[x.id])delete S.seen[x.id]});save();render()}
+    if(a==='back'){view=null;render()}
+    if(a==='live'){S.live=!S.live;save();render()}
+    if(a==='offline'){S.offline=!S.offline;save();render();if(S.offline)toast('Map saved. Works without signal.')}
+    if(a==='verify'){vstep=0;sheet='verify';render()}
+    if(a==='vnext'){vstep++;render();if(vstep===2)setTimeout(()=>{S.verified=true;sheet=null;save();render();toast('You\'re verified')},1500)}
+    if(a==='spotify'){const add=artistsFor(f).filter(x=>!S.artists.includes(x)).slice(0,3);S.artists=[...S.artists,...add];
+      add.forEach(x=>{const g=GENRE_OF[x];if(g&&!S.genres.includes(g))S.genres.push(g)});save();render();toast(add.length?`Imported ${add.length} artists from Spotify`:'Already up to date')}
+    if(a==='invite'){if(!S.invited){S.invited=true;save();render();toast('A friend joined with your code · +200 pts')}}
+    if(a==='sendpost'){const t=document.getElementById('cap').value.trim()||'Counting down 🎶';
+      S.feed.unshift({id:'u'+Date.now(),crew:crewsHere()[0]?.name||f.name,who:S.name,cap:t,g:grad(f),likes:0});sheet=null;S.mtab='feed';save();render();toast('Posted')}
+    if(a==='createcrew'){const nm=document.getElementById('crewname').value.trim();if(!nm){document.getElementById('crewname').focus();return}
+      const id='mine-'+Date.now();
+      S.crews.unshift({id,fest:f.id,name:nm,members:[],mine:true,ice:0,unread:false,playlist:[],meet:{opts:[SPOTS[f.id],'Main entrance'],votes:[0,0],mine:null},
+        msgs:[{who:'sys',t:`You started ${nm}${draft.women?' · women only':''}${draft.approval!==false?' · you approve who joins':''}`}]});
+      S.stats.join++;sheet=null;save();render();toast(`${nm} is live in Discover`);
+      setTimeout(()=>{const nm2=draft.women?'Inês':'Lucía';if(draft.approval!==false){S.requests.push({id:'r'+Date.now(),fest:f.id,crew:id,crewName:nm,name:nm2,verified:true});save();render();toast(`${nm2} wants to join ${nm}`)}
+        else{const c=S.crews.find(x=>x.id===id);c.members.push(nm2);c.msgs.push({who:'sys',t:`${nm2} joined`});c.unread=true;save();render()}},3000)}
+    if(a==='sendpoll'){const q=document.getElementById('pq').value.trim(),o1=document.getElementById('po1').value.trim(),o2=document.getElementById('po2').value.trim();
+      if(!q||!o1||!o2)return;const c=S.crews.find(x=>x.id===view.arg);c.msgs.push({type:'poll',who:'me',q,opts:[o1,o2],votes:[0,0],mine:null});
+      S.stats.polls++;sheet=null;save();render();scrollEnd();
+      setTimeout(()=>{const m=c.msgs[c.msgs.length-1];if(m.type==='poll'){m.votes[0]+=Math.min(2,c.members.length);save();render();scrollEnd()}},1500)}
+    if(a==='song'){const c=S.crews.find(x=>x.id===view.arg);const pool2=[...S.artists,...artistsFor(f)].filter(x=>SONGS[x]&&!c.playlist.includes(x));
+      const art=pool2[0];sheet=null;if(!art){toast('Playlist has all your songs');render();return}
+      c.playlist.push(art);c.msgs.push({who:'sys',t:`You added "${SONGS[art]}" by ${art} to the playlist`});S.stats.songs++;save();render();scrollEnd()}
+    if(a==='safe'){const n=sendToCrews(`${S.name} checked in: I'm here & safe`);S.safeAt=Date.now();S.stats.safe++;sheet=null;save();render();scrollEnd();toast(n?'Your crew knows you\'re safe':'Join a crew so someone gets this')}
+    if(a==='lost'){const n=sendToCrews(`📍 ${S.name} is lost and shared their location. Meet at the CREW pin on the map.`,'alert');sheet=null;save();render();scrollEnd();toast(n?'Location sent to your crew':'Join a crew so someone gets this')}
+    if(a==='sos'){sheet='sos';render()}
+    if(a==='sosgo'){sheet=null;render();toast('Demo: this would call 112')}
+    if(a==='sendreport'){sheet=null;render();toast('Report sent. We review it within 24h.')}
+    if(a==='order'){const n=Object.values(S.cart).reduce((x,y)=>x+y,0);const g=S.groupOrder;S.cart={};save();view=null;render();
+      toast(g?'Group order sent to your crew':`${n} item${n===1?'':'s'} ordered · ready in ~10 min`)}
+    if(a==='reset'){S=fresh();obStep=0;sheet=null;view=null;save();render()}
+  });
+  const form=document.getElementById('compose');
+  if(form)form.onsubmit=e=>{e.preventDefault();const i=document.getElementById('msg');const t=i.value.trim();if(!t)return;
+    const c=S.crews.find(x=>x.id===view.arg);c.msgs.push({who:'me',t});S.stats.msgs++;save();render();scrollEnd();document.getElementById('msg').focus();if(c.members.length)reply(c)};
+  const af=document.getElementById('askform');
+  if(af)af.onsubmit=e=>{e.preventDefault();const t=document.getElementById('askin').value.trim();if(t)askSend(t)};
+  const top=document.getElementById('top');
+  if(top){let x0=null,dx=0;
+    top.onpointerdown=e=>{x0=e.clientX;top.style.transition='none';top.setPointerCapture(e.pointerId)};
+    top.onpointermove=e=>{if(x0===null)return;dx=e.clientX-x0;top.style.transform=`translateX(${dx}px) rotate(${dx/18}deg)`};
+    top.onpointerup=()=>{top.style.transition='';if(Math.abs(dx)>90)swipe(dx>0?1:-1);else top.style.transform='';x0=null;dx=0};
+  }
+}
+function askSend(q){S.ask.push({me:true,t:q});save();render();scrollEnd();setTimeout(()=>{S.ask.push({t:answer(q)});save();render();scrollEnd()},600)}
+render();
+</script>
+</body>
+</html>
